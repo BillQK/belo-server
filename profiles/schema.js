@@ -9,11 +9,9 @@ const profileSchema = new mongoose.Schema({
   followerCount: { type: Number, default: 0 },
   followingCount: { type: Number, default: 0 },
   numberOfPosts: { type: Number, default: 0 },
-  // Change this later to gridFS 
+  // Change this later to gridFS
   coverImage: String,
   avatar: String,
 });
 
-const Profile = mongoose.model("Profile", profileSchema);
-
-module.exports = Profile;
+export default profileSchema;
