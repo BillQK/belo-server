@@ -27,7 +27,7 @@ const postSchema = new mongoose.Schema(
       default: 0,
     },
   },
-  { timestamps: true }
+  { collection: "posts" }
 );
 
 export default postSchema;
