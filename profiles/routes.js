@@ -5,14 +5,14 @@ function ProfilesRoutes(app) {
     const { userId, displayName, userName, description } = req.body;
     console.log(userId);
 
-    const currentUser = await dao.createProfile({
+    const profile = await dao.createProfile({
       userId,
       displayName,
       userName,
       description,
     });
 
-    res.sendStatus(201);
+    res.json(profile);
   };
   const deleteProfile = async (req, res) => {};
 
