@@ -6,5 +6,5 @@ export const deleteUserFollowsUser = (followerId, followedId) =>
   model.deleteOne({ follower: followerId, followed: followedId });
 export const findUsersFollowingUser = (followedId) =>
   model.find({ followed: followedId }).populate("follower").exec();
-export const findUsersFollowedByUser = (follwerId) =>
-  model.find({ follower: follwerId }).populate("followed").exec();
+export const findUsersFollowedByUser = (followerId) =>
+  model.find({ follower: followerId }).populate("followed").exec();

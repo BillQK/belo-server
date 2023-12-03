@@ -16,8 +16,8 @@ const profileSchema = new mongoose.Schema(
     followingCount: { type: Number, default: 0 },
     numberOfPosts: { type: Number, default: 0 },
     // Change this later to gridFS
-    coverImage: { type: String, default: "img/default-cover.png" },
-    avatar: { type: String, default: "img/default-avatar.png" },
+    coverImage: { type: String, default: "/img/default-cover.png" },
+    avatar: { type: String, default: "/img/default-avatar.png" },
   },
   { collection: "profiles" }
 );

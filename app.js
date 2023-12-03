@@ -5,6 +5,7 @@ import cors from "cors";
 import UserRoutes from "./users/routes.js";
 import PostRoutes from "./posts/routes.js";
 import ProfilesRoutes from "./profiles/routes.js";
+import FollowsRoutes from "./follows/routes.js";
 const CONNECTION_STRING =
   process.env.DB_CONNECTION_STRING || "mongodb://127.0.0.1:27017/belo";
 mongoose
@@ -29,5 +30,6 @@ app.use(express.json());
 UserRoutes(app);
 PostRoutes(app);
 ProfilesRoutes(app);
+FollowsRoutes(app);
 
 app.listen(4000);

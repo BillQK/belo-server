@@ -3,6 +3,7 @@ import * as dao from "./dao.js";
 function FollowsRoutes(app) {
   const createUserFollowsUser = async (req, res) => {
     const { followerId, followedId } = req.params;
+
     if (followerId === undefined) {
       const follower = req.session.currentUser._id;
       const follow = await dao.createUserFollowsUser(follower, followedId);
@@ -24,18 +25,20 @@ function FollowsRoutes(app) {
   };
   const findUsersFollowedByUser = async (req, res) => {
     const { followerId } = req.params;
+
     const users = await dao.findUsersFollowedByUser(followerId);
+
     res.json(users);
   };
 
+  app.get("/api/users/:followedId/followers", findUsersFollowingUser);
+  app.get("/api/users/:followerId/following", findUsersFollowedByUser);
   app.post("/api/users/follows/:followedId", createUserFollowsUser);
   app.post("/api/users/:followerId/follows/:followedId", createUserFollowsUser);
   app.delete(
     "/api/users/:followerId/follows/:followedId",
     deleteUserFollowsUser
   );
-  app.get("/api/users/:followedId/followers", findUsersFollowingUser);
-  app.get("/api/users/:followerId/following", findUsersFollowedByUser);
 }
 
 export default FollowsRoutes;

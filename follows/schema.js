@@ -1,17 +1,13 @@
 import mongoose from "mongoose";
-
-const schema = new mongoose.Schema(
+const schema = mongoose.Schema(
   {
-    user: {
+    follower: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "users",
-      required: true,
-      index: true,
     },
-    follows: {
+    followed: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "users",
-      required: true,
     },
     createdAt: {
       type: Date,
@@ -20,5 +16,4 @@ const schema = new mongoose.Schema(
   },
   { collection: "follows" }
 );
-
 export default schema;
