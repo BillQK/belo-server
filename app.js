@@ -6,8 +6,10 @@ import UserRoutes from "./users/routes.js";
 import PostRoutes from "./posts/routes.js";
 import ProfilesRoutes from "./profiles/routes.js";
 import FollowsRoutes from "./follows/routes.js";
+import StorageRoutes from "./storage/routes.js";
 const CONNECTION_STRING =
   process.env.DB_CONNECTION_STRING || "mongodb://127.0.0.1:27017/belo";
+
 mongoose
   .connect(CONNECTION_STRING)
   .then(() => console.log("Successfully connected to MongoDB Atlas!"))
@@ -31,5 +33,6 @@ UserRoutes(app);
 PostRoutes(app);
 ProfilesRoutes(app);
 FollowsRoutes(app);
+StorageRoutes(app);
 
 app.listen(4000);
