@@ -19,7 +19,6 @@ function ProfilesRoutes(app) {
     try {
       // Assuming req.userId contains the ID of the profile you want to fetch
       const userId = req.params.userId;
-
       // Find the profile in the database
       const profile = await dao.findProfileByUserId(userId);
 
@@ -27,7 +26,6 @@ function ProfilesRoutes(app) {
       if (!profile) {
         return res.status(404).send({ message: "Profile not found" });
       }
-
       // Send the found profile as a response
       res.json(profile);
     } catch (error) {
