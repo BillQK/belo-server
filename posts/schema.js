@@ -2,27 +2,24 @@ import mongoose from "mongoose";
 
 const postSchema = new mongoose.Schema(
   {
-    username: {
-      type: String,
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
       required: true,
     },
-    trackId: {
-      type: String,
-      require: true,
+    spotifyContent: {
+      contentType: {
+        type: String,
+        enum: ["audiobook", "artist", "song", "playlist", "album", "podcast"],
+      },
+      contentID: { type: String },
     },
+
     description: {
       type: String,
       required: true,
     },
-    likes: {
-      type: Number,
-      default: 0,
-    },
-    comments: {
-      type: Number,
-      default: 0,
-    },
-    shares: {
+    likesCount: {
       type: Number,
       default: 0,
     },

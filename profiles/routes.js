@@ -63,6 +63,6 @@ function ProfilesRoutes(app) {
   app.get("/api/profiles", getProfiles);
   app.get("/api/profiles/:userId", findProfileById);
   app.put("/api/profiles/:userId", updateProfile);
-  app.delete("/api/profiles/:postId", deleteProfile);
+  app.delete("/api/profiles/:testId", deleteProfile);
 }
 export default ProfilesRoutes;
