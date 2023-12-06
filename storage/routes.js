@@ -4,7 +4,6 @@ import { CloudinaryStorage } from "multer-storage-cloudinary";
 import "dotenv/config.js";
 
 const CLOUD_NAME = process.env.CLOUD_NAME;
-console.log("CLOUD_NAME: " + CLOUD_NAME);
 const API_KEY = process.env.CLOUD_API_KEY;
 const API_SECRET = process.env.CLOUD_API_SECRET;
 

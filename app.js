@@ -1,3 +1,4 @@
+import "dotenv/config.js";
 import express from "express";
 import session from "express-session";
 import mongoose from "mongoose";
@@ -7,8 +8,7 @@ import PostRoutes from "./posts/routes.js";
 import ProfilesRoutes from "./profiles/routes.js";
 import FollowsRoutes from "./follows/routes.js";
 import StorageRoutes from "./storage/routes.js";
-const CONNECTION_STRING =
-  process.env.DB_CONNECTION_STRING || "mongodb://127.0.0.1:27017/belo";
+const CONNECTION_STRING = process.env.DB_CONNECT_STRING;
 
 mongoose
   .connect(CONNECTION_STRING)
@@ -19,7 +19,7 @@ const app = express();
 app.use(
   cors({
     credentials: true,
-    origin: "http://localhost:3000",
+    origin: process.env.FRONTEND_URL,
   })
 );
 const sessionOptions = {
