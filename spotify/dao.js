@@ -21,8 +21,7 @@ export const searchSpotify = async (query, accessToken) => {
 };
 export const refreshSpotifyToken = async () => {
   try {
-    const response = await axios({
-      method: "POST",
+    const response = await axios.post(process.env.SPOTIFY_BASE_API, {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
