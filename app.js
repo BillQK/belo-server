@@ -18,10 +18,11 @@ mongoose
   .catch((error) => console.error("Connection error: ", error.message));
 
 const app = express();
+console.log("Frontend URL for CORS:", process.env.FRONTEND_URL);
 app.use(
   cors({
-    credentials: true,
     origin: process.env.FRONTEND_URL,
+    credentials: true,
   })
 );
 const sessionOptions = {
