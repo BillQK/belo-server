@@ -30,7 +30,6 @@ function UserRoutes(app) {
 
   const signin = async (req, res) => {
     const { username, password } = req.body;
-
     // res.json({ username, password });
     const currentUser = await dao.findUserByCredentials(username, password);
     req.session["currentUser"] = currentUser;
@@ -68,9 +67,15 @@ function UserRoutes(app) {
   const updateUser = async (req, res) => {
     const { id } = req.params;
     const user = req.body;
-    const status = await dao.updateUser(id, user);
-    currentUser = await dao.findUserById(id);
-    res.json(status);
+    console.log("Received data for update:", id, user);
+    delete user._id;
+    try {
+      const status = await dao.updateUser(id, user);
+      res.json(status);
+    } catch (error) {
+      console.error("Error updating user:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
   };
 
   app.post("/api/users/signin", signin);

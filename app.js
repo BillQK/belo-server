@@ -8,7 +8,9 @@ import PostRoutes from "./posts/routes.js";
 import ProfilesRoutes from "./profiles/routes.js";
 import FollowsRoutes from "./follows/routes.js";
 import StorageRoutes from "./storage/routes.js";
-const CONNECTION_STRING = process.env.DB_CONNECT_STRING;
+import SpotifyRoutes from "./spotify/routes.js";
+const CONNECTION_STRING =
+  process.env.DB_CONNECT_STRING || "mongodb://localhost:27017/Belo";
 
 mongoose
   .connect(CONNECTION_STRING)
@@ -34,5 +36,6 @@ PostRoutes(app);
 ProfilesRoutes(app);
 FollowsRoutes(app);
 StorageRoutes(app);
+SpotifyRoutes(app);
 
 app.listen(4000);

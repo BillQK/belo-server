@@ -16,6 +16,7 @@
     "request": "^2.88.2"
   },
   "dependencies": {
+    "axios": "^1.6.2",
     "cloudinary": "^1.41.0",
     "cors": "^2.8.5",
     "express-session": "^1.17.3",

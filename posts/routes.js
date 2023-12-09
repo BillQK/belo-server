@@ -2,14 +2,15 @@ import * as dao from "./dao.js";
 
 function PostRoutes(app) {
   const createPost = async (req, res) => {
-    const { userId, spotifyContent, description, likesCount } = req.body;
-    const post = await dao.createPost({
+    const { userId, post } = req.body;
+    const spotifyContent = post.spotifyContent;
+    const description = post.description;
+    const data = await dao.createPost({
       userId,
       spotifyContent,
       description,
-      likesCount,
     });
-    res.status(201).json(post);
+    res.status(201).json(data);
   };
   const deletePost = async (req, res) => {};
   const findAllPosts = async (req, res) => {
