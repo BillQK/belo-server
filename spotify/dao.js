@@ -21,15 +21,15 @@ export const searchSpotify = async (query, accessToken) => {
 };
 export const refreshSpotifyToken = async () => {
   try {
-    const response = await axios({
-      method: "POST",
+    const response = await axios.post(process.env.SPOTIFY_BASE_API, {
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
       },
       body: new URLSearchParams({
         grant_type: "refresh_token",
-        refresh_token: refreshToken,
         client_id: clientId,
+        refresh_token: refreshToken,
       }),
     });
     refreshToken = response.data.access_token;
