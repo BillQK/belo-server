@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import "dotenv/config.js";
 
 var refreshToken = "";
 const clientId = process.env.SPOTIFY_CLIENT_ID;
