@@ -1,53 +1,33 @@
-import axios from "axios";
-import qs from 'qs'; // qs is a querystring parsing library
-import "dotenv/config.js";
+import model from "./model.js";
+import { ObjectId } from "mongodb";
 
-var refreshToken = "";
-const clientId = process.env.SPOTIFY_CLIENT_ID;
-const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
-
-export const searchSpotify = async (query, accessToken) => {
-  // Make a request to the Spotify API with the provided access token
-  refreshToken = accessToken;
-  const response = await axios.get(process.env.SPOTIFY_BASE_API, {
-    params: {
-      q: query,
-      type: "album",
-    },
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-  return response.data.albums.items;
-};
-
-export const refreshSpotifyToken = async () => {
-  const credentials = `${clientId}:${clientSecret}`;
-  const encodedCredentials = Buffer.from(credentials).toString("base64");
-
-  const data = qs.stringify({
-    grant_type: "refresh_token",
-    refresh_token: refreshToken,
-  });
+export const createOrUpdateTokens = async (tokens) => {
+  // Assuming 'userId' is the unique identifier for your tokens
+  const filter = { userId: tokens.userId };
+  const update = tokens;
+  const options = { new: true, upsert: true };
 
   try {
-    const response = await axios.post(
-      "https://accounts.spotify.com/api/token",
-      data,
-      {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          Authorization: `Basic ${encodedCredentials}`,
-        },
-      }
-    );
-
-    const newAccessToken = response.data.access_token;
-    // Save or process the new access token as needed
-    return newAccessToken;
+    const result = await model.findOneAndUpdate(filter, update, options);
+    return result;
   } catch (error) {
-    console.error("Error refreshing token:", error);
+    console.error("Error in createOrUpdateTokens:", error);
+    throw error; // or handle it as per your application's error handling strategy
+  }
+};
+
+export const getTokensByUserId = async (userId) => {
+  try {
+    // Check if userId is a valid ObjectId string
+    if (!ObjectId.isValid(userId)) {
+      console.error("Invalid userId format:", userId);
+      return null;
+    }
+
+    const userToken = await model.findOne({ userId: new ObjectId(userId) });
+    return userToken;
+  } catch (error) {
+    console.error("Error retrieving user token by userId:", error);
     return null;
   }
 };

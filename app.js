@@ -9,6 +9,7 @@ import ProfilesRoutes from "./profiles/routes.js";
 import FollowsRoutes from "./follows/routes.js";
 import StorageRoutes from "./storage/routes.js";
 import SpotifyRoutes from "./spotify/routes.js";
+import cookieParser from "cookie-parser";
 const CONNECTION_STRING =
   process.env.DB_CONNECT_STRING || "mongodb://localhost:27017/Belo";
 
@@ -39,6 +40,7 @@ if (process.env.NODE_ENV !== "development") {
 }
 app.use(session(sessionOptions));
 app.use(express.json());
+app.use(cookieParser());
 UserRoutes(app);
 PostRoutes(app);
 ProfilesRoutes(app);
