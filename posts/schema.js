@@ -8,6 +8,7 @@ const postSchema = new mongoose.Schema(
       required: true,
     },
     spotifyContent: {
+      contentName: String,
       contentType: {
         type: String,
         enum: ["audiobook", "artist", "song", "playlist", "album", "podcast"],

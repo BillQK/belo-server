@@ -41,7 +41,7 @@ function PostRoutes(app) {
   const updatePost = async (req, res) => {
     const postId = req.params.postId;
     const updateData = req.body; // Assuming the updated data is sent in the request body
-
+    console.log(updateData);
     try {
       const updatedPost = await dao.updatePost(postId, updateData);
       if (!updatedPost) {
