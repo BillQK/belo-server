@@ -12,7 +12,23 @@ function PostRoutes(app) {
     });
     res.status(201).json(data);
   };
-  const deletePost = async (req, res) => {};
+
+  const deletePost = async (req, res) => {
+    const postId = req.params.postId;
+
+    try {
+      const result = await dao.deletePost(postId);
+      if (!result) {
+        return res.status(404).json({ message: "Post not found" });
+      }
+      res.json(200);
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: "Error deleting post", error: error.message });
+    }
+  };
+
   const findAllPosts = async (req, res) => {
     const posts = await dao.findAllPosts();
     res.json(posts);
@@ -22,7 +38,22 @@ function PostRoutes(app) {
     const posts = await dao.findAllPostsByUserId(userId);
     res.json(posts);
   };
-  const updatePost = async (req, res) => {};
+  const updatePost = async (req, res) => {
+    const postId = req.params.postId;
+    const updateData = req.body; // Assuming the updated data is sent in the request body
+
+    try {
+      const updatedPost = await dao.updatePost(postId, updateData);
+      if (!updatedPost) {
+        return res.status(404).json({ message: "Post not found" });
+      }
+      res.json(updatedPost);
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: "Error updating post", error: error.message });
+    }
+  };
 
   app.post("/api/posts", createPost);
   app.get("/api/posts", findAllPosts);
