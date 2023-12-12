@@ -1,3 +1,5 @@
+import * as dao from "./dao.js";
+
 function SpotifyRoutes(app) {
   const searchSpotifyHandler = async (req, res) => {
     let { q, accessToken } = req.query;
