@@ -22,5 +22,6 @@ export const searchSpotify = async (query, accessToken) => {
     return response.data.albums.items;
   } catch (error) {
     console.log(error);
+    throw error
   }
 };

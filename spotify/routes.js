@@ -8,8 +8,8 @@ function SpotifyRoutes(app) {
       const searchResult = await dao.searchSpotify(q, accessToken);
       res.json(searchResult);
     } catch (error) {
-      if (error.response && error.response.status === 401) {
-        res.status(error.response.status).json(error.response.data);
+      if (error) {
+        res.status(error.status).json(error.message);
       }
     }
   };
