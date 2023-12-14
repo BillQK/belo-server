@@ -5,7 +5,6 @@ const schema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "users",
       required: true,
-      unique: true,
     },
     postId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -15,5 +14,7 @@ const schema = mongoose.Schema(
   },
   { collection: "likes" }
 );
+// Define a compound unique index for the combination of user and postId
+likeSchema.index({ user: 1, postId: 1 }, { unique: true });
 
 export default schema;
