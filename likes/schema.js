@@ -14,7 +14,7 @@ const schema = mongoose.Schema(
   },
   { collection: "likes" }
 );
-// Define a compound unique index for the combination of user and postId
-schema.index({ user: 1, postId: 1 }, { unique: true });
+// // Define a compound unique index for the combination of user and postId
+// schema.index({ user: 1, postId: 1 }, { unique: true });
 
 export default schema;
