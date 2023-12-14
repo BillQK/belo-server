@@ -1,45 +1,50 @@
 import * as dao from "./dao.js";
 
 function LikesRoutes(app) {
-  const createUserLikesAlbum = async (req, res) => {
-    const { userId, albumId, title } = req.params;
+  const createUserLikesPost = async (req, res) => {
+    const { userId, postId } = req.params;
     if (userId === undefined) {
       const user = req.session.currentUser._id;
-      const like = await dao.createUserLikesAlbum(user, albumId, title);
+      const like = await dao.createUserLikesPost(user, postId);
       res.json(like);
       return;
     }
-    const like = await dao.createUserLikesAlbum(userId, albumId, title);
+    const like = await dao.createUserLikesPost(userId, postId);
     res.json(like);
   };
-  const deleteUserLikesAlbum = async (req, res) => {
-    const { userId, albumId } = req.params;
+  const deleteUserLikesPost = async (req, res) => {
+    const { userId, postId } = req.params;
     if (userId === undefined) {
       const user = req.session.currentUser._id;
-      const status = await dao.deleteUserLikesAlbum(userId, albumId);
+      const status = await dao.deleteUserLikesPost(userId, postId);
       res.json(status);
       return;
     }
-    const status = await dao.deleteUserLikesAlbum(userId, albumId);
+    const status = await dao.deleteUserLikesPost(userId, postId);
     res.json(status);
   };
-  const findUsersLikedAlbum = async (req, res) => {
-    const { albumId } = req.params;
-    const users = await dao.findUsersLikedAlbum(albumId);
+  const findUsersLikedPost = async (req, res) => {
+    const { postId } = req.params;
+    const users = await dao.findUsersLikedPost(postId);
     res.json(users);
   };
-  const findAlbumsLikedByUser = async (req, res) => {
+  const findPostsLikedByUser = async (req, res) => {
     const { userId } = req.params;
-    const albums = await dao.findAlbumsLikedByUser(userId);
-    res.json(albums);
+    const posts = await dao.findPostsLikedByUser(userId);
+    res.json(post);
   };
 
-  app.post("/api/users/:userId/likes/:albumId", createUserLikesAlbum);
-  app.post("/api/users/likes/:albumId/title/:title", createUserLikesAlbum);
-  app.delete("/api/users/:userId/likes/:albumId", deleteUserLikesAlbum);
-  app.delete("/api/users/likes/:albumId", deleteUserLikesAlbum);
-  app.get("/api/albums/:albumId/likes", findUsersLikedAlbum);
-  app.get("/api/users/:userId/likes", findAlbumsLikedByUser);
+  app.get("/api/likes/user/:userId", findPostsLikedByUser);
+  app.get("/api/likes/post/:postId", findUsersLikedPost);
+  app.post("/api/likes/:userId/:postId", createUserLikesPost);
+  app.delete("/api/likes/:userId/:postId", deleteUserLikesPost);
+
+  app.delete("/api/users/:userId/likes/:albumId", deleteUserLikesPost);
+  app.delete("/api/users/likes/:albumId", deleteUserLikesPost);
+  app.get("/api/albums/:albumId/likes", findUsersLikedPost);
+  app.get("/api/users/:userId/likes", findPostsLikedByUser);
+
+  // app.post("/api/users/likes/:albumId/title/:title", createUserLikesPost);
 }
 
 export default LikesRoutes;

@@ -4,9 +4,14 @@ const schema = mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "users",
+      required: true,
+      unique: true,
     },
-    albumId: String,
-    title: String,
+    postId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "posts",
+      required: true,
+    },
   },
   { collection: "likes" }
 );

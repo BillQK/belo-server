@@ -63,7 +63,7 @@ function ProfilesRoutes(app) {
     const { searchTerm } = req.params;
     console.log("SearchTerm from Params", searchTerm);
     const result = await dao.fuzzySearchUserName(searchTerm);
-
+    
     res.json(result);
   };
 

@@ -1,15 +1,16 @@
+import cookieParser from "cookie-parser";
+import cors from "cors";
 import "dotenv/config.js";
 import express from "express";
 import session from "express-session";
 import mongoose from "mongoose";
-import cors from "cors";
-import UserRoutes from "./users/routes.js";
+import FollowsRoutes from "./follows/routes.js";
+import LikesRoutes from "./likes/routes.js";
 import PostRoutes from "./posts/routes.js";
 import ProfilesRoutes from "./profiles/routes.js";
-import FollowsRoutes from "./follows/routes.js";
-import StorageRoutes from "./storage/routes.js";
 import SpotifyRoutes from "./spotify/routes.js";
-import cookieParser from "cookie-parser";
+import StorageRoutes from "./storage/routes.js";
+import UserRoutes from "./users/routes.js";
 const CONNECTION_STRING =
   process.env.DB_CONNECT_STRING || "mongodb://localhost:27017/Belo";
 
@@ -47,5 +48,5 @@ ProfilesRoutes(app);
 FollowsRoutes(app);
 StorageRoutes(app);
 SpotifyRoutes(app);
-
+LikesRoutes(app);
 app.listen(4000);
