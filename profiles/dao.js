@@ -1,6 +1,7 @@
 import model from "./model.js";
 import mongoose from "mongoose";
 import * as postDao from "../posts/dao.js";
+import * as userDao from "../users/dao.js";
 export const createProfile = (profile) => model.create(profile);
 export const findProfileByProfileId = (profileId) => model.findById(profileId);
 export const findProfileByUserId = (userId) =>
@@ -102,6 +103,38 @@ export const decreaseNumberOfPost = async (postId) => {
     console.log("Status: ", response);
   } catch (error) {
     console.error("Error updating followed count:", error);
+    throw error;
+  }
+};
+
+export const fuzzySearchUserName = async (searchTerm) => {
+  try {
+    console.log("SearchTerm", searchTerm);
+    // Ensure searchTerm is a string and escape special regex characters
+    const safeSearchTerm = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const regex = new RegExp(safeSearchTerm, "i"); // 'i' for case-insensitivity
+    console.log("Regex", regex);
+    const userProfiles = await model
+      .find({ userName: { $regex: regex } })
+      .limit(10)
+      .select("userId userName avatar");
+
+    // Fetch 'restricted' status for each user and append it to the result
+    const results = await Promise.all(
+      userProfiles.map(async (profile) => {
+        const user = await userDao
+          .findUserById(profile.userId)
+          .select("restricted");
+        return {
+          ...profile.toObject(),
+          restricted: user ? user.restricted : false,
+        };
+      })
+    );
+    console.log("results", results);
+    return results;
+  } catch (error) {
+    console.error("Error in fuzzySearchProfile:", error);
     throw error;
   }
 };

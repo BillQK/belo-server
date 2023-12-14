@@ -13,7 +13,6 @@ function ProfilesRoutes(app) {
 
     res.json(profile);
   };
-  const deleteProfile = async (req, res) => {};
 
   const findProfileById = async (req, res) => {
     try {
@@ -59,10 +58,19 @@ function ProfilesRoutes(app) {
     const profiles = await dao.findAllProfiles();
     res.json(profiles);
   };
+
+  const findProfileByUsername = async (req, res) => {
+    const { searchTerm } = req.params;
+    console.log("SearchTerm from Params", searchTerm);
+    const result = await dao.fuzzySearchUserName(searchTerm);
+
+    res.json(result);
+  };
+
   app.post("/api/profiles", createProfile);
   app.get("/api/profiles", getProfiles);
   app.get("/api/profiles/:userId", findProfileById);
+  app.get("/api/profiles/search/:searchTerm", findProfileByUsername);
   app.put("/api/profiles/:userId", updateProfile);
-  app.delete("/api/profiles/:testId", deleteProfile);
 }
 export default ProfilesRoutes;

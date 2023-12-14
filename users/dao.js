@@ -20,5 +20,3 @@ export const updateUser = async (userId, userUpdateData) => {
     throw error;
   }
 };
-
-export const deleteUser = (userId) => model.deleteOne({ _id: userId });

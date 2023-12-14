@@ -6,10 +6,11 @@ const userSchema = new mongoose.Schema(
     email: String,
     role: {
       type: String,
-      enum: ["ADMIN", "MEMBER"],
+      enum: ["ADMIN", "MEMBER", "DEV"],
       default: "MEMBER",
     },
     accesstoken: String,
+    restricted: { type: Boolean, default: false },
   },
   { collection: "users" }
 );

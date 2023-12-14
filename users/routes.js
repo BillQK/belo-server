@@ -1,5 +1,8 @@
 import * as dao from "./dao.js";
-
+import * as profilesDao from "../profiles/dao.js";
+import * as postsDao from "../posts/dao.js";
+import * as followsDao from "../follows/dao.js";
+import * as likesDao from "../likes/dao.js";
 // let currentUser = null;
 
 function UserRoutes(app) {
@@ -88,7 +91,6 @@ function UserRoutes(app) {
   app.get("/api/users/username/:username", findUserByUsername);
   app.get("/api/users/:username/:password/:firstName/:lastName", createUser);
   app.post("/api/users", () => {});
-  app.delete("/api/users/:id", () => {});
   app.put("/api/users/:id", updateUser);
 }
 
