@@ -1,5 +1,5 @@
 import * as dao from "./dao.js";
-
+import * as profileDao from "../profiles/dao.js";
 function PostRoutes(app) {
   const createPost = async (req, res) => {
     const { userId, post } = req.body;
@@ -10,6 +10,7 @@ function PostRoutes(app) {
       spotifyContent,
       description,
     });
+    const response = await profileDao.increaseNumberOfPost(userId);
     res.status(201).json(data);
   };
 
@@ -17,7 +18,9 @@ function PostRoutes(app) {
     const postId = req.params.postId;
 
     try {
+      const response = await profileDao.decreaseNumberOfPost(postId);
       const result = await dao.deletePost(postId);
+      console.log("delete post", result);
       if (!result) {
         return res.status(404).json({ message: "Post not found" });
       }
