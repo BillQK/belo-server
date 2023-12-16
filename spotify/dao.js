@@ -1,32 +1,33 @@
-import axios from "axios";
-import qs from "qs"; // qs is a querystring parsing library
-import "dotenv/config.js";
+import model from "./model.js";
+import { ObjectId } from "mongodb";
 
-const clientId = process.env.SPOTIFY_CLIENT_ID;
-const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
+export const createOrUpdateTokens = async (tokens) => {
+  // Assuming 'userId' is the unique identifier for your tokens
+  const filter = { userId: tokens.userId };
+  const update = tokens;
+  const options = { new: true, upsert: true };
 
-export const searchSpotify = async (query, accessToken) => {
-  // Make a request to the Spotify API with the provided access token
-  // Check if the query is provided and is not empty
-  if (!query || query.trim() === "") {
-    // Return a default response or an empty array if no query is provided
-    return [];
-  }
   try {
-    const response = await axios.get(process.env.SPOTIFY_BASE_API, {
-      params: {
-        q: query,
-        type: "album",
-      },
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    console.log(response);
-    return response.data.albums.items;
+    const result = await model.findOneAndUpdate(filter, update, options);
+    return result;
   } catch (error) {
-    console.log(error);
-    throw error;
+    console.error("Error in createOrUpdateTokens:", error);
+    throw error; // or handle it as per your application's error handling strategy
+  }
+};
+
+export const getTokensByUserId = async (userId) => {
+  try {
+    // Check if userId is a valid ObjectId string
+    if (!ObjectId.isValid(userId)) {
+      console.error("Invalid userId format:", userId);
+      return null;
+    }
+
+    const userToken = await model.findOne({ userId: new ObjectId(userId) });
+    return userToken;
+  } catch (error) {
+    console.error("Error retrieving user token by userId:", error);
+    return null;
   }
 };
