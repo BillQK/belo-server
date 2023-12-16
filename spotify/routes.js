@@ -7,7 +7,6 @@ import * as tokenDao from "./dao.js";
 function SpotifyRoutes(app) {
   app.get("/login", loginHandler);
   app.get("/callback", callbackHandler);
-  app.get("/refresh_token", refreshTokenHandler);
   app.get("/search", searchSpotify);
 }
 
@@ -95,34 +94,6 @@ const callbackHandler = async (req, res) => {
   }
 };
 
-// Refresh Token Handler
-const refreshTokenHandler = async (req, res) => {
-  const refresh_token = req.query.refresh_token;
-  const authOptions = {
-    method: "post",
-    url: "https://accounts.spotify.com/api/token",
-    data: stringify({
-      grant_type: "refresh_token",
-      refresh_token: refresh_token,
-    }),
-    headers: {
-      "content-type": "application/x-www-form-urlencoded",
-      Authorization: getAuthHeader(
-        process.env.SPOTIFY_CLIENT_ID,
-        process.env.SPOTIFY_CLIENT_SECRET
-      ),
-    },
-  };
-
-  try {
-    const response = await axios(authOptions);
-    res.send(response.data);
-  } catch (error) {
-    console.error("Error in Spotify refresh token:", error);
-    res.sendStatus(500);
-  }
-};
-
 // Search Spotify
 const searchSpotify = async (req, res) => {
   const userId = req.query.userId;
@@ -162,12 +133,13 @@ const performSpotifySearch = async (query, accessToken, type, res) => {
 
 // Refresh Spotify Token
 const refreshSpotifyToken = async (refreshToken) => {
+  console.log("Refreshing Spotify Token");
   const clientId = process.env.CLIENT_ID; // Ensure these are set in your environment
   const clientSecret = process.env.CLIENT_SECRET;
   const credentials = `${clientId}:${clientSecret}`;
   const encodedCredentials = Buffer.from(credentials).toString("base64");
 
-  const data = qs.stringify({
+  const data = stringify({
     grant_type: "refresh_token",
     refresh_token: refreshToken,
   });
