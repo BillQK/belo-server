@@ -4,7 +4,7 @@ export const createUser = (user) => model.create(user);
 export const findAllUsers = () => model.find();
 export const findUserById = (userId) => model.findById(userId);
 export const findUserByUsername = (username) =>
-  model.findOne({ username: username });
+  model.findOne({ userName: username });
 export const findUserByCredentials = (username, password) =>
   model.findOne({ userName: username, password: password });
 export const updateUser = async (userId, userUpdateData) => {
