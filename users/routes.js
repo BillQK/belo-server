@@ -78,9 +78,7 @@ async function UserRoutes(app) {
   };
   const account = (req, res) => {
     const currentUser = req.session["currentUser"];
-    // if (!currentUser) {
-    //   return null;
-    // }
+  
     res.json(currentUser);
   };
 
@@ -109,15 +107,6 @@ async function UserRoutes(app) {
   app.get("/api/users/:username/:password/:firstName/:lastName", createUser);
   app.post("/api/users", () => {});
   app.put("/api/users/:id", updateUser);
-
-  const users = await dao.findAllUsers();
-  console.log(users);
-  await Promise.all(
-    users.map(async (user) => {
-      const hashedPassword = await hashPassword(user.password);
-      await dao.updateUser(user._id, { password: hashedPassword });
-    })
-  );
 }
 
 export default UserRoutes;

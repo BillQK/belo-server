@@ -14,6 +14,7 @@
     "axios": "^1.6.2",
     "bcrypt": "^5.1.1",
     "cloudinary": "^1.41.0",
+    "connect-redis": "^7.1.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
@@ -26,6 +27,7 @@
     "multer-storage-cloudinary": "^4.0.0",
     "qs": "^6.11.2",
     "querystring": "^0.2.1",
+    "redis": "^4.6.11",
     "request": "^2.88.2"
   }
 }
