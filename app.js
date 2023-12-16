@@ -48,10 +48,10 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      proxy: true,
       secure: process.env.NODE_ENV === "production",
       httpOnly: true,
       sameSite: "lax", // Adjust as per your requirement
+      proxy: true,
     },
   })
 );

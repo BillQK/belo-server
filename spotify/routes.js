@@ -27,6 +27,9 @@ const getAuthHeader = (clientId, clientSecret) => {
 // Login Handler
 const loginHandler = async (req, res) => {
   const state = generateRandomString(16);
+  if (!req.session.currentUser) {
+    return res.status(401).send("No active session");
+  }
   const userId = req.session.currentUser._id;
   await stateDao.createOrUpdateStateUserIDMapping(state, userId);
 
