@@ -11,9 +11,12 @@ import ProfilesRoutes from "./profiles/routes.js";
 import SpotifyRoutes from "./spotify/routes.js";
 import StorageRoutes from "./storage/routes.js";
 import UserRoutes from "./users/routes.js";
+import RedisStore from "connect-redis";
+
+import { createClient } from "redis";
+// MongoDB connection
 const CONNECTION_STRING =
   process.env.DB_CONNECT_STRING || "mongodb://localhost:27017/Belo";
-
 mongoose
   .connect(CONNECTION_STRING)
   .then(() => console.log("Successfully connected to MongoDB Atlas!"))
@@ -21,27 +24,48 @@ mongoose
 
 const app = express();
 
+// Initialize client.
+let redisClient = createClient({
+  password: process.env.REDIS_PASSWORD,
+  socket: {
+    host: process.env.REDIS_HOST,
+    port: process.env.REDIS_PORT,
+  },
+});
+redisClient.connect().catch(console.error);
+
+// Initialize store.
+let redisStore = new RedisStore({
+  client: redisClient,
+  prefix: "myapp:",
+});
+
+// Use Redis to store session
+app.use(
+  session({
+    store: redisStore,
+    secret: process.env.SESSION_SECRET || "default secret",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      proxy: true,
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+      sameSite: "lax", // Adjust as per your requirement
+    },
+  })
+);
+// Other middleware
 app.use(
   cors({
     origin: process.env.FRONTEND_URL,
     credentials: true,
   })
 );
-const sessionOptions = {
-  secret: "any string",
-  resave: false,
-  saveUninitialized: false,
-};
-if (process.env.NODE_ENV !== "development") {
-  sessionOptions.proxy = true;
-  sessionOptions.cookie = {
-    sameSite: "none",
-    secure: true,
-  };
-}
-app.use(session(sessionOptions));
 app.use(express.json());
 app.use(cookieParser());
+
+// Routes
 UserRoutes(app);
 PostRoutes(app);
 ProfilesRoutes(app);
@@ -49,4 +73,9 @@ FollowsRoutes(app);
 StorageRoutes(app);
 SpotifyRoutes(app);
 LikesRoutes(app);
-app.listen(4000);
+
+// Start the server
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
