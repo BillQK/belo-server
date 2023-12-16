@@ -56,6 +56,8 @@ async function UserRoutes(app) {
       res.status(403).send("Username or password incorrect");
       return;
     }
+    const sessionUser = { ...currentUser };
+    delete sessionUser.password; // Remove password from session data
     req.session["currentUser"] = currentUser;
     res.json(currentUser);
   };
@@ -81,7 +83,7 @@ async function UserRoutes(app) {
   };
   const account = (req, res) => {
     const currentUser = req.session["currentUser"];
-  
+
     res.json(currentUser);
   };
 

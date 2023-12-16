@@ -24,7 +24,6 @@ const getAuthHeader = (clientId, clientSecret) => {
   return `Basic ${Buffer.from(credentials).toString("base64")}`;
 };
 
-// Login Handler
 const loginHandler = async (req, res) => {
   const state = generateRandomString(16);
   if (!req.session.currentUser) {
@@ -33,18 +32,15 @@ const loginHandler = async (req, res) => {
   const userId = req.session.currentUser._id;
   await stateDao.createOrUpdateStateUserIDMapping(state, userId);
 
-  res.cookie("spotify_auth_state", state);
-
-  const scope = "user-read-private user-read-email";
-  res.redirect(
-    `https://accounts.spotify.com/authorize?${stringify({
-      response_type: "code",
-      client_id: process.env.SPOTIFY_CLIENT_ID,
-      scope: scope,
-      redirect_uri: process.env.REDIRECT_URI,
-      state: state,
-    })}`
-  );
+  const authUrl = `https://accounts.spotify.com/authorize?${stringify({
+    response_type: "code",
+    client_id: process.env.SPOTIFY_CLIENT_ID,
+    scope: "user-read-private user-read-email",
+    redirect_uri: process.env.REDIRECT_URI,
+    state: state,
+  })}`;
+  console.log(authUrl);
+  res.json({ authUrl, state });
 };
 
 // Callback Handler
@@ -55,7 +51,7 @@ const callbackHandler = async (req, res) => {
 
   if (state === null || state !== storedState) {
     res.redirect(
-      `/${process.env.FRONTEND_URL}/#${stringify({ error: "state_mismatch" })}`
+      `${process.env.FRONTEND_URL}/#${stringify({ error: "state_mismatch" })}`
     );
   } else {
     res.clearCookie("spotify_auth_state");
