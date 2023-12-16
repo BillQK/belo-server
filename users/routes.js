@@ -73,6 +73,9 @@ async function UserRoutes(app) {
       return;
     }
     const currentUser = await dao.createUser({ userName, email, password });
+    // Set the session without sensitive data
+    const sessionUser = { ...currentUser };
+    delete sessionUser.password; // Remove password from session data
     req.session["currentUser"] = currentUser;
     res.json(currentUser);
   };
