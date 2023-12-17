@@ -40,14 +40,13 @@ let redisStore = new RedisStore({
   prefix: "myapp:",
 });
 
-
 app.use(cookieParser());
 
 // Use Redis to store session
 app.use(
   session({
     store: redisStore,
-    secret: process.env.SESSION_SECRET || "default secret",
+    secret: "any string",
     resave: false,
     saveUninitialized: false,
     cookie: {

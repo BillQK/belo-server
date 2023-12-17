@@ -41,26 +41,47 @@ async function UserRoutes(app) {
 
   const signin = async (req, res) => {
     const { username, password } = req.body;
-    const currentUser = await dao.findUserByUsername(username);
-    console.log(currentUser);
-    if (!currentUser) {
-      res.status(403).send("Username not found");
-      return;
+
+    console.log("Signin attempt for username:", username); // Log the attempt
+
+    try {
+      const currentUser = await dao.findUserByUsername(username);
+
+      if (!currentUser) {
+        console.warn(`Signin failed: Username ${username} not found`);
+        res.status(403).send("Username not found");
+        return;
+      }
+
+      const isPasswordValid = await comparePassword(
+        password,
+        currentUser.password
+      );
+      if (!isPasswordValid) {
+        console.warn(
+          `Signin failed: Invalid password for username ${username}`
+        );
+        res.status(403).send("Username or password incorrect");
+        return;
+      }
+
+      // Create a session user object without the password
+      const sessionUser = { ...currentUser._doc, password: undefined };
+
+      // Store the session user in the session
+      req.session["currentUser"] = sessionUser;
+      req.session.save();
+
+      console.log(`User ${username} signed in successfully`);
+
+      // Respond with the session user (without the password)
+      res.json(sessionUser);
+    } catch (error) {
+      console.error("Signin error:", error);
+      res.status(500).send("Internal Server Error");
     }
-    const isPasswordValid = await comparePassword(
-      password,
-      currentUser.password
-    );
-    if (!isPasswordValid) {
-      res.status(403).send("Username or password incorrect");
-      return;
-    }
-    const sessionUser = { ...currentUser };
-    delete sessionUser.password; // Remove password from session data
-    req.session["currentUser"] = currentUser;
-    req.session.save();
-    res.json(currentUser);
   };
+
   const signout = (req, res) => {
     req.session.destroy();
     // currentUser = null;
