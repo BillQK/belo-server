@@ -107,7 +107,10 @@ const searchSpotify = async (req, res) => {
   } catch (error) {
     if (error.response && error.response.status === 401) {
       try {
-        const newAccessToken = await refreshSpotifyToken(tokens.refresh_token);
+        const newAccessToken = await refreshSpotifyToken(
+          tokens.refresh_token,
+          userId
+        );
         await performSpotifySearch(query, newAccessToken, res);
       } catch (refreshError) {
         console.error("Error refreshing token:", refreshError);
@@ -156,8 +159,8 @@ const refreshSpotifyToken = async (refreshToken) => {
   );
 
   const newAccessToken = response.data.access_token;
-  await tokenDao.updateUserTokens({
-    userId: refreshToken,
+  await tokenDao.createOrUpdateTokens({
+    userId: userId,
     access_token: newAccessToken,
     refresh_token: refreshToken,
   });
