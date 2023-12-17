@@ -134,8 +134,8 @@ const performSpotifySearch = async (query, accessToken, type, res) => {
 // Refresh Spotify Token
 const refreshSpotifyToken = async (refreshToken) => {
   console.log("Refreshing Spotify Token");
-  const clientId = process.env.CLIENT_ID; // Ensure these are set in your environment
-  const clientSecret = process.env.CLIENT_SECRET;
+  const clientId = process.env.SPOTIFY_CLIENT_ID; // Ensure these are set in your environment
+  const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
   const credentials = `${clientId}:${clientSecret}`;
   const encodedCredentials = Buffer.from(credentials).toString("base64");
 

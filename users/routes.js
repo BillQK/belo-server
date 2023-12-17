@@ -133,6 +133,8 @@ async function UserRoutes(app) {
   app.get("/api/users/:username/:password/:firstName/:lastName", createUser);
   app.post("/api/users", () => {});
   app.put("/api/users/:id", updateUser);
+  const result = await hashPassword("Trang5400");
+  console.log(result);
 }
 
 export default UserRoutes;
