@@ -43,7 +43,6 @@ async function UserRoutes(app) {
     const { username, password } = req.body;
     const currentUser = await dao.findUserByUsername(username);
     console.log(currentUser);
-    req.session["currentUser"] = currentUser;
     if (!currentUser) {
       res.status(403).send("Username not found");
       return;
