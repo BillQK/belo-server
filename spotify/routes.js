@@ -25,6 +25,7 @@ const getAuthHeader = (clientId, clientSecret) => {
 };
 
 const loginHandler = async (req, res) => {
+  console.log(req);
   const state = generateRandomString(16);
   if (!req.session.currentUser) {
     return res.status(401).send("No active session");
