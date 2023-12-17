@@ -51,7 +51,6 @@ app.use(
     proxy: true,
     cookie: {
       secure: process.env.NODE_ENV === "production",
-      httpOnly: true,
       sameSite: "none", // Adjust as per your requirement
     },
   })

@@ -53,17 +53,17 @@ async function UserRoutes(app) {
         return;
       }
 
-      // const isPasswordValid = await comparePassword(
-      //   password,
-      //   currentUser.password
-      // );
-      // if (!isPasswordValid) {
-      //   console.warn(
-      //     `Signin failed: Invalid password for username ${username}`
-      //   );
-      //   res.status(403).send("Username or password incorrect");
-      //   return;
-      // }
+      const isPasswordValid = await comparePassword(
+        password,
+        currentUser.password
+      );
+      if (!isPasswordValid) {
+        console.warn(
+          `Signin failed: Invalid password for username ${username}`
+        );
+        res.status(403).send("Username or password incorrect");
+        return;
+      }
 
       // Create a session user object without the password
       const sessionUser = { ...currentUser._doc, password: undefined };
