@@ -53,7 +53,7 @@ app.use(
     cookie: {
       secure: process.env.NODE_ENV === "production",
       httpOnly: true,
-      sameSite: "lax", // Adjust as per your requirement
+      sameSite: "none", // Adjust as per your requirement
       proxy: true,
     },
   })
