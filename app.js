@@ -40,6 +40,9 @@ let redisStore = new RedisStore({
   prefix: "myapp:",
 });
 
+
+app.use(cookieParser());
+
 // Use Redis to store session
 app.use(
   session({
@@ -63,7 +66,6 @@ app.use(
   })
 );
 app.use(express.json());
-app.use(cookieParser());
 
 // Routes
 UserRoutes(app);
