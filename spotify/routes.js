@@ -138,30 +138,35 @@ const performSpotifySearch = async (query, accessToken, type, res) => {
 const refreshSpotifyToken = async (refreshToken, userId) => {
   console.log("Refreshing Spotify Token");
   const clientId = process.env.SPOTIFY_CLIENT_ID; // Ensure these are set in your environment
-  const credentials = `${clientId}:${clientId}`;
+  const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
+  const credentials = `${clientId}:${clientSecret}`;
   const encodedCredentials = Buffer.from(credentials).toString("base64");
 
-  const data = stringify({
+  const form = stringify({
     grant_type: "refresh_token",
     refresh_token: refreshToken,
-    client_id: encodedCredentials,
   });
+
+  const authOptions = {
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Authorization: "Basix " + encodedCredentials,
+    },
+    form: form,
+    json: true,
+  };
 
   const response = await axios.post(
     "https://accounts.spotify.com/api/token",
-    {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-    },
-    data
+    authOptions
   );
 
   const newAccessToken = response.data.access_token;
+  const newRefreshToken = response.data.refresh_token;
   await tokenDao.createOrUpdateTokens({
     userId: userId,
     access_token: newAccessToken,
-    refresh_token: refreshToken,
+    refresh_token: newRefreshToken,
   });
   return newAccessToken;
 };
