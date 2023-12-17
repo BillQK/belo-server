@@ -37,7 +37,6 @@ redisClient.connect().catch(console.error);
 // Initialize store.
 let redisStore = new RedisStore({
   client: redisClient,
-  prefix: "myapp:",
 });
 
 app.use(cookieParser());
@@ -49,11 +48,11 @@ app.use(
     secret: "any string",
     resave: false,
     saveUninitialized: false,
+    proxy: true,
     cookie: {
       secure: process.env.NODE_ENV === "production",
       httpOnly: true,
       sameSite: "none", // Adjust as per your requirement
-      proxy: true,
     },
   })
 );
