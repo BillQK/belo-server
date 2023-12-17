@@ -48,7 +48,9 @@ const loginHandler = async (req, res) => {
 const callbackHandler = async (req, res) => {
   const code = req.query.code || null;
   const state = req.query.state || null;
-  if (state === null) {
+  const storedState = req.cookies ? req.cookies.spotify_auth_state : null;
+
+  if (state === null || state !== storedState) {
     res.redirect(
       `${process.env.FRONTEND_URL}/#${stringify({ error: "state_mismatch" })}`
     );
