@@ -149,8 +149,8 @@ const refreshSpotifyToken = async (refreshToken, userId) => {
 
   const authOptions = {
     headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      Authorization: "Basix " + encodedCredentials,
+      "content-type": "application/x-www-form-urlencoded",
+      Authorization: "Basic " + encodedCredentials,
     },
     form: form,
     json: true,
