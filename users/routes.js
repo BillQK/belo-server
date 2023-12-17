@@ -58,6 +58,7 @@ async function UserRoutes(app) {
     const sessionUser = { ...currentUser };
     delete sessionUser.password; // Remove password from session data
     req.session["currentUser"] = currentUser;
+    req.session.save();
     res.json(currentUser);
   };
   const signout = (req, res) => {
