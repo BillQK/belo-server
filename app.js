@@ -52,7 +52,7 @@ if (process.env.NODE_ENV !== "development") {
   sessionOptions.cookie = {
     secure: true,
     maxAge: 18000 * 1000,
-    sameSite: "lax",
+    sameSite: "none",
   };
 }
 app.use(session(sessionOptions));
