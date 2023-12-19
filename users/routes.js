@@ -1,3 +1,4 @@
+import { Hash } from "crypto";
 import * as dao from "./dao.js";
 import bcrypt from "bcrypt";
 
@@ -25,17 +26,6 @@ async function UserRoutes(app) {
   const findUserByUsername = async (req, res) => {
     const { username } = req.params;
     const user = await dao.findUserByUsername(username);
-    res.json(user);
-  };
-  const createUser = async (req, res) => {
-    const { userName, password, firstName, lastName } = req.params;
-    const hashedPassword = await hashPassword(password);
-    const user = await dao.createUser({
-      userName,
-      password: hashedPassword,
-      firstName,
-      lastName,
-    });
     res.json(user);
   };
 
@@ -66,8 +56,9 @@ async function UserRoutes(app) {
       }
 
       // Create a session user object without the password
-      const sessionUser = { ...currentUser._doc, password: undefined };
+      const sessionUser = { ...currentUser._doc };
 
+      delete sessionUser.password;
       // Store the session user in the session
       req.session["currentUser"] = sessionUser;
       req.session.save();
@@ -75,7 +66,7 @@ async function UserRoutes(app) {
       console.log(`User ${username} signed in successfully`);
 
       // Respond with the session user (without the password)
-      res.json(sessionUser);
+      res.json(currentUser);
     } catch (error) {
       console.error("Signin error:", error);
       res.status(500).send("Internal Server Error");
@@ -89,17 +80,27 @@ async function UserRoutes(app) {
   };
   const signup = async (req, res) => {
     const { email, userName, password } = req.body;
-    console.log(email);
     const user = await dao.findUserByUsername(userName);
     if (user) {
       res.status(403).send("Username already taken");
       return;
     }
-    const currentUser = await dao.createUser({ userName, email, password });
+
+    const hashedPassword = await hashPassword(password);
+
+    const currentUser = await dao.createUser({
+      userName,
+      email,
+      password: hashedPassword,
+    });
+    console.log(currentUser);
+
     // Set the session without sensitive data
-    const sessionUser = { ...currentUser };
+    const sessionUser = { ...currentUser._doc };
     delete sessionUser.password; // Remove password from session data
-    req.session["currentUser"] = currentUser;
+    req.session["currentUser"] = sessionUser;
+    req.session.save();
+
     res.json(currentUser);
   };
   const account = (req, res) => {
@@ -130,7 +131,6 @@ async function UserRoutes(app) {
   app.get("/api/users", findAllUsers);
   app.get("/api/users/:id", findUserById);
   app.get("/api/users/username/:username", findUserByUsername);
-  app.get("/api/users/:username/:password/:firstName/:lastName", createUser);
   app.post("/api/users", () => {});
   app.put("/api/users/:id", updateUser);
 }

@@ -41,7 +41,7 @@ const loginHandler = async (req, res) => {
     state: state,
   })}`;
   console.log(authUrl);
-  res.json({ authUrl, state });
+  res.json({ authUrl });
 };
 
 // Callback Handler
@@ -50,7 +50,7 @@ const callbackHandler = async (req, res) => {
   const state = req.query.state || null;
   const storedState = req.cookies ? req.cookies.spotify_auth_state : null;
 
-  if (state === null || state !== storedState) {
+  if (state === null) {
     res.redirect(
       `${process.env.FRONTEND_URL}/#${stringify({ error: "state_mismatch" })}`
     );
@@ -83,7 +83,7 @@ const callbackHandler = async (req, res) => {
         access_token,
         refresh_token,
       });
-
+      console.log("save user accesstoken");
       res.redirect(`${process.env.FRONTEND_URL}/Dashboard/feed`);
     } catch (error) {
       console.error("Error in Spotify callback:", error);
@@ -131,6 +131,7 @@ const performSpotifySearch = async (query, accessToken, type, res) => {
       Authorization: `Bearer ${accessToken}`,
     },
   });
+  console.log(response);
   res.json(response.data.albums.items);
 };
 

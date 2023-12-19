@@ -26,10 +26,10 @@ const app = express();
 
 // Initialize client.
 let redisClient = createClient({
-  password: process.env.REDIS_PASSWORD,
+  // password: process.env.REDIS_PASSWORD ,
   socket: {
-    host: process.env.REDIS_HOST,
-    port: process.env.REDIS_PORT,
+    host: process.env.REDIS_HOST || "localhost",
+    port: process.env.REDIS_PORT || "6379",
   },
 });
 redisClient.connect().catch(console.error);
@@ -41,20 +41,20 @@ let redisStore = new RedisStore({
 
 app.use(cookieParser());
 
-// Use Redis to store session
-app.use(
-  session({
-    store: redisStore,
-    secret: "any string",
-    resave: false,
-    saveUninitialized: false,
-    proxy: true,
-    cookie: {
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "none", // Adjust as per your requirement
-    },
-  })
-);
+const sessionOptions = {
+  store: redisStore,
+  secret: "any string",
+  resave: false,
+  saveUninitialized: false,
+};
+if (process.env.NODE_ENV !== "development") {
+  sessionOptions.proxy = true;
+  sessionOptions.cookie = {
+    sameSite: "none",
+    secure: true,
+  };
+}
+app.use(session(sessionOptions));
 // Other middleware
 app.use(
   cors({
