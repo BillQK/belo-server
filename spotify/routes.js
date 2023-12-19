@@ -41,7 +41,7 @@ const loginHandler = async (req, res) => {
     state: state,
   })}`;
   console.log(authUrl);
-  res.redirect(authUrl);
+  res.json({ authUrl });
 };
 
 // Callback Handler
