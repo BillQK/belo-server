@@ -45,7 +45,7 @@ const sessionOptions = {
   store: redisStore,
   secret: "any string",
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
 };
 if (process.env.NODE_ENV !== "development") {
   sessionOptions.proxy = true;
