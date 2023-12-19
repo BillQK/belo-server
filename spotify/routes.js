@@ -137,15 +137,17 @@ const performSpotifySearch = async (query, accessToken, type, res) => {
 // Refresh Spotify Token
 const refreshSpotifyToken = async (refreshToken, userId) => {
   console.log("Refreshing Spotify Token");
+
   const clientId = process.env.SPOTIFY_CLIENT_ID; // Ensure these are set in your environment
   const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
+
   var authOptions = {
     url: "https://accounts.spotify.com/api/token",
     headers: {
       "content-type": "application/x-www-form-urlencoded",
       Authorization:
         "Basic " +
-        new Buffer.from(clientId + ":" + clientSecret).toString("base64"),
+        Buffer.from(clientId + ":" + clientSecret).toString("base64"),
     },
     form: {
       grant_type: "refresh_token",
@@ -154,16 +156,31 @@ const refreshSpotifyToken = async (refreshToken, userId) => {
     json: true,
   };
 
-  const response = await axios.post(authOptions);
+  // Log the authOptions object for debugging
+  console.log("Auth Options:", authOptions);
 
-  const newAccessToken = response.body.access_token;
-  const newRefreshToken = response.body.refresh_token;
-  await tokenDao.createOrUpdateTokens({
-    userId: userId,
-    access_token: newAccessToken,
-    refresh_token: newRefreshToken,
-  });
-  return newAccessToken;
+  try {
+    const response = await axios.post(
+      authOptions.url,
+      new URLSearchParams(authOptions.form).toString(),
+      { headers: authOptions.headers }
+    );
+
+    const newAccessToken = response.data.access_token;
+    const newRefreshToken = response.data.refresh_token;
+
+    await tokenDao.createOrUpdateTokens({
+      userId: userId,
+      access_token: newAccessToken,
+      refresh_token: newRefreshToken,
+    });
+
+    return newAccessToken;
+  } catch (error) {
+    // Log the error for debugging
+    console.error("Error refreshing Spotify token:", error);
+    throw error; // rethrow the error so it can be handled by the caller
+  }
 };
 
 export default SpotifyRoutes;
