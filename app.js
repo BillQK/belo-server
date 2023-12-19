@@ -51,9 +51,8 @@ if (process.env.NODE_ENV !== "development") {
   sessionOptions.proxy = true;
   sessionOptions.cookie = {
     secure: true,
-    sameSite: "lax",
-    secure: true,
     maxAge: 18000 * 1000,
+    sameSite: "lax",
   };
 }
 app.use(session(sessionOptions));
