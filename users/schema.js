@@ -9,7 +9,6 @@ const userSchema = new mongoose.Schema(
       enum: ["ADMIN", "MEMBER", "DEV"],
       default: "MEMBER",
     },
-    accesstoken: String,
     restricted: { type: Boolean, default: false },
   },
   { collection: "users" }

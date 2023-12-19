@@ -23,6 +23,11 @@ const postSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+
+    createAt: {
+      type: Date,
+      default: Date.now
+    }
   },
   { collection: "posts" }
 );
