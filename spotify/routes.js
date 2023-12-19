@@ -111,7 +111,7 @@ const searchSpotify = async (req, res) => {
           tokens.refresh_token,
           userId
         );
-        await performSpotifySearch(query, newAccessToken, res);
+        await performSpotifySearch(query, newAccessToken, type, res);
       } catch (refreshError) {
         console.error("Error refreshing token:", refreshError);
         res.status(500).send("Internal Server Error");
