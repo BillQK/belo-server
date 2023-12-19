@@ -149,7 +149,7 @@ const refreshSpotifyToken = async (refreshToken, userId) => {
     },
     form: {
       grant_type: "refresh_token",
-      refresh_token: refresh_token,
+      refresh_token: refreshToken,
     },
     json: true,
   };
