@@ -26,7 +26,7 @@ const app = express();
 
 // Initialize client.
 let redisClient = createClient({
-  // password: process.env.REDIS_PASSWORD ,
+  password: process.env.REDIS_PASSWORD || "",
   socket: {
     host: process.env.REDIS_HOST || "localhost",
     port: process.env.REDIS_PORT || "6379",
