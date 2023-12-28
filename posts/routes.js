@@ -60,7 +60,7 @@ function PostRoutes(app) {
 
   app.post("/api/posts", createPost);
   app.get("/api/posts", findAllPosts);
-  //app.get("/api/posts/:postId", findPostById);
+  // app.get("/api/posts/:postId", findPostById);
   app.put("/api/posts/:postId", updatePost);
   app.delete("/api/posts/:postId", deletePost);
   app.get("/api/users/:userId/posts", findAllPostsByUserId);

@@ -14,6 +14,7 @@ import UserRoutes from "./users/routes.js";
 import RedisStore from "connect-redis";
 
 import { createClient } from "redis";
+import CommentRoutes from "./comments/routes.js";
 // MongoDB connection
 const CONNECTION_STRING =
   process.env.DB_CONNECT_STRING || "mongodb://localhost:27017/Belo";
@@ -73,6 +74,7 @@ FollowsRoutes(app);
 StorageRoutes(app);
 SpotifyRoutes(app);
 LikesRoutes(app);
+CommentRoutes(app);
 
 // Start the server
 const PORT = process.env.PORT || 4000;
