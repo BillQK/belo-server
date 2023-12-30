@@ -9,7 +9,7 @@ export const findProfileByUserId = (userId) =>
 export const updateProfileByUserId = (userId, profile) =>
   model.updateOne({ userId: userId }, { $set: profile });
 export const deletePost = (profileId) => model.deleteOne({ _id: profileId });
-export const findAllProfiles = () => model.find().limit(10);
+export const findAllProfiles = () => model.find().limit(15);
 // Increment the following count for a user when they follow someone
 export const updateFollowedCount = async (followedId) => {
   try {
